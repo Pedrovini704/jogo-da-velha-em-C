@@ -1,0 +1,77 @@
+#include <stdio.h>
+
+char tabuleiro[3][3] = {{' ', ' ', ' '}, {' ', ' ', ' '}, {' ', ' ', ' '}};
+char jogador = 'X';
+
+void imprimirTabuleiro() {
+    printf("\n  1   2   3\n");
+    for (int i = 0; i < 3; i++) {
+        printf("%d", i + 1);
+        for (int j = 0; j < 3; j++) {
+            printf(" %c", tabuleiro[i][j]);
+            if (j < 2) {
+                printf(" |");
+            }
+        }
+        printf("\n");
+        if (i < 2) {
+            printf("  ---|---|---\n");
+        }
+    }
+    printf("\n");
+}
+
+int verificarVitoria() {
+    for (int i = 0; i < 3; i++) {
+        if (tabuleiro[i][0] == jogador && tabuleiro[i][1] == jogador && tabuleiro[i][2] == jogador) {
+            return 1;
+        }
+        if (tabuleiro[0][i] == jogador && tabuleiro[1][i] == jogador && tabuleiro[2][i] == jogador) {
+            return 1;
+        }
+    }
+    if (tabuleiro[0][0] == jogador && tabuleiro[1][1] == jogador && tabuleiro[2][2] == jogador) {
+        return 1;
+    }
+    if (tabuleiro[0][2] == jogador && tabuleiro[1][1] == jogador && tabuleiro[2][0] == jogador) {
+        return 1;
+    }
+    return 0;
+}
+
+int main() {
+    int linha, coluna;
+    int jogadas = 0;
+
+    printf("Bem-vindo ao Jogo da Velha!\n");
+
+    while (1) {
+        imprimirTabuleiro();
+        printf("Jogador %c, faça sua jogada (linha e coluna): ", jogador);
+        scanf("%d %d", &linha, &coluna);
+
+        if (linha < 1 || linha > 3 || coluna < 1 || coluna > 3 || tabuleiro[linha - 1][coluna - 1] != ' ') {
+            printf("Jogada inválida. Tente novamente.\n");
+            continue;
+        }
+
+        tabuleiro[linha - 1][coluna - 1] = jogador;
+        jogadas++;
+
+        if (verificarVitoria()) {
+            imprimirTabuleiro();
+            printf("Jogador %c venceu! Parabéns!\n", jogador);
+            break;
+        }
+
+        if (jogadas == 9) {
+            imprimirTabuleiro();
+            printf("Empate! O jogo acabou.\n");
+            break;
+        }
+
+        jogador = (jogador == 'X') ? 'O' : 'X';
+    }
+
+    return 0;
+}
